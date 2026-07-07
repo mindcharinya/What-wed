@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div class="fun-zone">
+    <span class="dancing-cat">🐱</span>
+    <span class="fun-caption">แมวเต้นให้กำลังใจ ✨</span>
+  </div>
+<title>ประวัติส่วนตัว</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lavender: #d9c7f0;
+    --purple-mid: #8a6bb8;
+    --purple-deep: #4a3470;
+    --near-black: #14101c;
+    --black: #060508;
+    --gold: #e3c789;
+    --text-light: #f4eefa;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    min-height:100vh;
+    font-family:'Prompt', 'Kanit', sans-serif;
+    color: var(--text-light);
+    background: linear-gradient(160deg,
+      var(--lavender) 0%,
+      var(--purple-mid) 28%,
+      var(--purple-deep) 55%,
+      var(--near-black) 80%,
+      var(--black) 100%);
+    background-attachment: fixed;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 48px 20px;
+    overflow-x:hidden;
+  }
+
+  .particle{
+    position:fixed;
+    border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.55), rgba(217,199,240,0));
+    filter: blur(1px);
+    pointer-events:none;
+    animation: float 14s ease-in-out infinite;
+    opacity:0.5;
+  }
+  @keyframes float{
+    0%,100%{ transform: translateY(0) translateX(0); }
+    50%{ transform: translateY(-40px) translateX(20px); }
+  }
+
+  .card{
+    position:relative;
+    width:100%;
+    max-width:720px;
+    background: rgba(20, 16, 28, 0.45);
+    border: 1px solid rgba(217,199,240,0.25);
+    border-radius: 28px;
+    padding: 48px 40px 40px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+    animation: rise 0.9s ease-out;
+  }
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(24px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .eyebrow{
+    font-size:13px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform:uppercase;
+    font-weight:500;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:28px; height:1px;
+    background: var(--gold);
+    display:inline-block;
+  }
+
+  h1{
+    font-family:'Prompt', sans-serif;
+    font-weight:700;
+    font-size: clamp(28px, 5vw, 40px);
+    color:#fff;
+    margin-bottom: 28px;
+    letter-spacing: 0.5px;
+  }
+
+  .avatar-zone{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .avatar-frame{
+    width:150px; height:150px;
+    border-radius:50%;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 0 6px rgba(227,199,137,0.12), 0 10px 30px rgba(0,0,0,0.5);
+    overflow:hidden;
+    position:relative;
+    background: linear-gradient(145deg, rgba(217,199,240,0.2), rgba(6,5,8,0.6));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .avatar-frame:hover{
+    transform: scale(1.03);
+    box-shadow: 0 0 0 8px rgba(227,199,137,0.18), 0 14px 34px rgba(0,0,0,0.55);
+  }
+
+  .avatar-frame img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:none;
+  }
+
+  .avatar-placeholder{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    color: rgba(244,238,250,0.65);
+    font-size:12px;
+    text-align:center;
+    padding:10px;
+  }
+  .avatar-placeholder svg{ width:34px; height:34px; opacity:0.7; }
+
+  #photoInput{ display:none; }
+
+  .upload-hint{
+    font-size:12px;
+    color: rgba(244,238,250,0.5);
+    letter-spacing:0.5px;
+  }
+
+  .info-list{
+    display:flex;
+    flex-direction:column;
+    gap: 0;
+  }
+
+  .info-row{
+    display:flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(217,199,240,0.12);
+    align-items:baseline;
+  }
+  .info-row:first-child{ padding-top:0; }
+  .info-row:last-child{ border-bottom:none; padding-bottom:0; }
+
+  .info-label{
+    flex: 0 0 150px;
+    font-size:13px;
+    color: var(--gold);
+    letter-spacing: 1px;
+    font-weight:500;
+  }
+
+  .info-value{
+    flex:1;
+    font-size:16px;
+    color: var(--text-light);
+    font-weight:400;
+    line-height:1.5;
+  }
+
+  .name-value{
+    font-size:22px;
+    font-weight:600;
+    color:#fff;
+  }
+
+  .github-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color: var(--text-light);
+    text-decoration:none;
+    border-bottom: 1px solid rgba(244,238,250,0.35);
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .github-link:hover{
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .section{
+    margin-top: 32px;
+  }
+
+  .section-title{
+    font-size:13px;
+    letter-spacing: 2px;
+    text-transform:uppercase;
+    color: var(--gold);
+    font-weight:600;
+    margin-bottom: 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-title::before{
+    content:"";
+    width:8px; height:8px;
+    border-radius:50%;
+    background: var(--gold);
+    display:inline-block;
+    box-shadow: 0 0 8px rgba(227,199,137,0.7);
+  }
+
+  .box{
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(217,199,240,0.18);
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .box p{
+    font-size:15px;
+    line-height:1.6;
+    color: var(--text-light);
+  }
+
+  .tag-group{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(138,107,184,0.22);
+    border: 1px solid rgba(217,199,240,0.35);
+    font-size:14px;
+    color: var(--text-light);
+    letter-spacing:0.3px;
+  }
+
+  .project-card{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+  }
+  .project-icon{
+    flex:0 0 auto;
+    width:38px; height:38px;
+    border-radius:10px;
+    background: linear-gradient(145deg, rgba(227,199,137,0.25), rgba(138,107,184,0.25));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+  }
+  .project-title{
+    font-size:16px;
+    font-weight:600;
+    color:#fff;
+    margin-bottom:4px;
+  }
+  .project-desc{
+    font-size:14px;
+    color: rgba(244,238,250,0.75);
+    line-height:1.5;
+  }
+
+  .contact-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding: 6px 0;
+  }
+  .contact-row:not(:last-child){
+    margin-bottom: 10px;
+  }
+  .contact-icon{
+    flex:0 0 auto;
+    width:34px; height:34px;
+    border-radius:10px;
+    background: rgba(227,199,137,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--gold);
+  }
+  .contact-link{
+    color: var(--text-light);
+    text-decoration:none;
+    font-size:15px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .contact-link:hover{
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  footer.signature{
+    margin-top:36px;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color: rgba(244,238,250,0.35);
+  }
+
+  .fun-zone{
+    margin-top: 32px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .dancing-cat{
+    font-size: 48px;
+    display:inline-block;
+    animation: catDance 0.9s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+  @keyframes catDance{
+    0%   { transform: rotate(-14deg) translateY(0) scaleX(1); }
+    25%  { transform: rotate(10deg) translateY(-6px) scaleX(1.05); }
+    50%  { transform: rotate(-8deg) translateY(0) scaleX(0.95); }
+    75%  { transform: rotate(12deg) translateY(-8px) scaleX(1.05); }
+    100% { transform: rotate(-14deg) translateY(0) scaleX(1); }
+  }
+  .fun-caption{
+    font-size:12px;
+    color: rgba(244,238,250,0.55);
+    letter-spacing:1px;
+  }
+
+  @media (max-width:480px){
+    .card{ padding: 36px 24px 30px; }
+    .info-row{ flex-direction:column; gap:4px; }
+    .info-label{ flex:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="eyebrow">Student Profile</div>
+  <h1>ประวัติส่วนตัว</h1>
+
+  <div class="avatar-zone">
+    <label class="avatar-frame" for="photoInput" id="avatarFrame">
+      <img id="avatarImg" alt="รูปโปรไฟล์">
+      <div class="avatar-placeholder" id="avatarPlaceholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"></path>
+        </svg>
+        <span>คลิกเพื่อเพิ่มรูป</span>
+      </div>
+    </label>
+    <input type="file" id="photoInput" accept="image/*">
+    <div class="upload-hint">รองรับไฟล์ JPG / PNG</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ข้อมูลส่วนตัว</div>
+    <div class="box">
+    <div class="info-list">
+    <div class="info-row">
+      <div class="info-label">ชื่อ - นามสกุล</div>
+      <div class="info-value name-value">นางสาวจริญญา เอาสัจจะ</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">รหัสนักศึกษา</div>
+      <div class="info-value">684110310027</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">มหาวิทยาลัย</div>
+      <div class="info-value">มหาวิทยาลัยนครพนม</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">คณะ</div>
+      <div class="info-value">วิศวกรรมศาสตร์</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">สาขา</div>
+      <div class="info-value">วิศวกรรมคอมพิวเตอร์</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">ชั้นปี</div>
+      <div class="info-value">ปี 2</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">วันเกิด</div>
+      <div class="info-value">10 มกราคม พ.ศ. 2548</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">อายุ</div>
+      <div class="info-value">21 ปี</div>
+    </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">รายวิชาที่ถนัด</div>
+    <div class="box">
+      <p>Programming</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ทักษะที่เกี่ยวข้อง</div>
+    <div class="box">
+      <div class="tag-group">
+        <span class="tag">🔤 ภาษา C</span>
+        <span class="tag">🌐 ภาษา HTML</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ผลงานที่เคยทำ</div>
+    <div class="box">
+      <div class="project-card">
+        <div class="project-icon">🔥</div>
+        <div>
+          <div class="project-title">เว็บแอปนับแคลอรี่</div>
+          <div class="project-desc">เว็บแอปพลิเคชันสำหรับบันทึกและติดตามปริมาณแคลอรี่ที่ได้รับในแต่ละวัน</div>
+        </div>
+      </div>
+      <div class="project-card" style="margin-top:16px;">
+        <div class="project-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M12 0.3c-6.6 0-12 5.4-12 12 0 5.3 3.4 9.8 8.2 11.4 0.6 0.1 0.8-0.3 0.8-0.6v-2.1c-3.3 0.7-4-1.6-4-1.6-0.5-1.4-1.3-1.7-1.3-1.7-1.1-0.7 0.1-0.7 0.1-0.7 1.2 0.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 0.1-0.8 0.4-1.3 0.7-1.6-2.6-0.3-5.4-1.3-5.4-5.9 0-1.3 0.5-2.4 1.2-3.2-0.1-0.3-0.5-1.5 0.1-3.2 0 0 1-0.3 3.3 1.2 1-0.3 2-0.4 3-0.4s2 0.1 3 0.4c2.3-1.5 3.3-1.2 3.3-1.2 0.6 1.7 0.2 2.9 0.1 3.2 0.8 0.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9 0.4 0.4 0.8 1.1 0.8 2.2v3.3c0 0.3 0.2 0.7 0.8 0.6 4.8-1.6 8.2-6.1 8.2-11.4 0-6.6-5.4-12-12-12z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="project-title">GitHub</div>
+          <div class="project-desc"><a href="https://github.com/" target="_blank" rel="noopener" class="contact-link">github.com</a> — ที่เก็บโค้ดและผลงานทั้งหมด</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ช่องทางการติดต่อ</div>
+    <div class="box">
+      <div class="contact-row">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+            <path d="M3 7l9 6 9-6"></path>
+          </svg>
+        </div>
+        <a href="mailto:charinyaaursas@gmail.com" class="contact-link">charinyaaursas@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="signature">Faculty of Engineering — Computer Engineering</footer>
+</div>
+
+<script>
+  const colors = ['rgba(217,199,240,0.5)','rgba(227,199,137,0.35)','rgba(255,255,255,0.4)'];
+  for(let i=0;i<18;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*5+2;
+    p.style.width = size+'px';
+    p.style.height = size+'px';
+    p.style.left = Math.random()*100+'vw';
+    p.style.top = Math.random()*100+'vh';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (10+Math.random()*10)+'s';
+    p.style.animationDelay = (Math.random()*6)+'s';
+    document.body.appendChild(p);
+  }
+
+  const photoInput = document.getElementById('photoInput');
+  const avatarImg = document.getElementById('avatarImg');
+  const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+  photoInput.addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      avatarImg.src = ev.target.result;
+      avatarImg.style.display = 'block';
+      avatarPlaceholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
+
+</body>
+</html>
+
